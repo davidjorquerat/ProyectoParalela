@@ -1,4 +1,4 @@
-Colo-Colo,Estadio Monumental,-33.506528,-70.605938
-Universidad de Chile,Estadio Nacional,-33.464619,-70.610676
-Universidad Catolica,Estadio San Carlos de Apoquindo,-33.395935,-70.500655
-Union Española,Estadio Santa Laura,-33.404528,-70.659016
+Colo-Colo;Estadio Monumental;-33.506528;-70.605938
+Universidad de Chile;Estadio Nacional;-33.464619;-70.610676
+Universidad Catolica;Estadio San Carlos de Apoquindo;-33.395935;-70.500655
+Union Española;Estadio Santa Laura;-33.404528;-70.659016

@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <math.h>
 #include <fstream>
+#include <cstring>
 //#include <mpi.h>
 
 using namespace std;
@@ -23,15 +24,14 @@ int leer_equipo(cadena archivo){
           long long cont=0;
             cadena string;
       
-            cout<<"Leyendo el fichero..."<<endl;
+            cout<<"Leyendo el fichero de equipos..."<<endl;
 
             while(!fs.eof())
           {
-              cont++;
               int cont2=0;
               fs.getline(string,80,'\n');
               cout<<"Dato sin separar: "<<string<<endl; 
-              ptr = strtok(string,",");
+              ptr = strtok(string,";");
               while(ptr != NULL)
                    {
                     if (cont2==0){
@@ -57,8 +57,9 @@ int leer_equipo(cadena archivo){
                     cont2++;
                     cout <<"Dato separado:"<< ptr << endl;
                     
-                    ptr = strtok(NULL, ",");
+                    ptr = strtok(NULL, ";");
                    }
+                   cont++;
             }
 
             int lineas= cont;
