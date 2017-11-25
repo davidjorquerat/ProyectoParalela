@@ -19,23 +19,20 @@ typedef struct
 
 int numero_estadios;
 
-/*
+
 //dinamico
 
-string* nombre;//nombre del equipo
-string* estadio;//nombre del estadio
-punto* puntos;// longitud y latitud del estadio
-*/
+string* nombre=NULL;//nombre del equipo
+string* estadio=NULL;//nombre del estadio
+punto* puntos=NULL;// longitud y latitud del estadio
+double** distancias=NULL;//distancia entre estadios
 
+/*
+//estatico
 string nombre[4];//nombre del equipo
 string estadio[4];//nombre del estadio
 punto puntos[4];// longitud y latitud del estadio
-
-
-
-double distancias[4][4];//distancia entre estadios
-
-
+*/
 
 double distancia_long_lat(float lat1, float long1, float lat2, float long2)//los calculos son en km
 {
@@ -68,40 +65,45 @@ int leer_equipo(cadena archivo){
         if (!fs) cout<<"El fichero no existe o no se puede leer.\n";
         else {
           long long cont=0;
-            cadena string;
-      
+            cadena palabra;
+
             cout<<"Leyendo el fichero de equipos..."<<endl;
 
             while(!fs.eof())
           {
+              // Asignacion de memoria a
+              nombre = (string*)realloc(nombre,sizeof(string)*(cont+1));//asignacion de memoria al nombre (vector de largo posiciones
+              estadio = (string*)realloc(estadio,sizeof(string)*(cont+1));
+              puntos = (punto*)realloc(puntos,sizeof(punto)*(cont+1));
+              // Fin asignacion
               int cont2=0;
-              fs.getline(string,80,'\n');
-              //cout<<"Dato sin separar: "<<string<<endl; 
-              ptr = strtok(string,";");
+              fs.getline(palabra,80,'\n');
+              //cout<<"Dato sin separar: "<<string<<endl;
+              ptr = strtok(palabra,";");
               while(ptr != NULL)
                    {
                     if (cont2==0){
-                    //COLUMNA 1 - NOMBRE EQUIPO  
+                    //COLUMNA 1 - NOMBRE EQUIPO
                     nombre[cont] = ptr;
-                      
+
                       }
                     if (cont2==1){
                     //COLUMNA 2 - NOMBRE ESTADIO
                     estadio[cont] = ptr;
-                      
+
                      }
                     if (cont2==2){
                     //COLUMNA 3 -  COORDENADA X
                     puntos[cont].latitud = atof(ptr);
-                      
+
                      }
                      if (cont2==3){
                     //COLUMNA 4 - COORDENADA Y
                     puntos[cont].longitud = atof(ptr);
-                      
+
                      }
                     //cout <<"Dato separado:"<< ptr << endl;
-                    
+
                     ptr = strtok(NULL, ";");
                     cont2++;
                    }
@@ -117,14 +119,13 @@ int main(int argc, char *argv[])
 {
 	numero_estadios = leer_equipo(argv[1]);
 
-/*
-  //dinamico
-  nombre = (string*)malloc(sizeof(string)*numero_estadios);//asignacion de memoria al nombre (vector de largo posiciones
-  estadio = (string*)malloc(sizeof(string)*numero_estadios);
-  puntos = (punto*)malloc(sizeof(punto)*numero_estadios);
-  */
-
-	cout<<"Lineas en el fichero: "<<numero_estadios<<endl; 
+	cout<<"Lineas en el fichero: "<<numero_estadios<<endl;
+  // Asignacion de memoria a matriz distancias
+  distancias = new double*[numero_estadios];
+  for(int i=0;i<numero_estadios;i++){
+    distancias[i]=new double[numero_estadios];
+  }
+  // Fin Asignacion
 
   for(int i=0; i<4; i++)
   {
