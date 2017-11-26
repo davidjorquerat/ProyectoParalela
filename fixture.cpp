@@ -23,14 +23,19 @@ int numero_estadios;
 //dinamico
 
 typedef struct{
-  string nombre; //Nombre del equipo
-  string estadio; //Nombre del estadio
-  punto puntos; //Latitud y longitud del estadio
+  string nombre;
+  string estadio;
+  punto puntos;
 }equipo;
 
-equipo* equipos=NULL; //Arreglo dinamico de equipos
+equipo* equipos=NULL;
 
-double** distancias=NULL;//Matriz distancia entre estadios
+double** distancias=NULL;//distancia entre estadios
+
+// Cuando se quitan estas variables, arroja error de segmento (core)
+string* nombre=NULL;//nombre del equipo
+string* estadio=NULL;//nombre del estadio
+punto* puntos=NULL;// longitud y latitud del estadio
 
 /*
 //estatico
@@ -78,6 +83,11 @@ int leer_equipo(cadena archivo){
           {
               // Asignacion de memoria a
               equipos = (equipo*)realloc(equipos,sizeof(equipo)*(cont+1));
+              // Cuando se quitan estas variables, arroja error de segmento (core)
+              nombre = (string*)realloc(nombre,sizeof(string)*(cont+1));//asignacion de memoria al nombre (vector de largo posiciones
+              estadio = (string*)realloc(estadio,sizeof(string)*(cont+1));
+              puntos = (punto*)realloc(puntos,sizeof(punto)*(cont+1));
+              //
               // Fin asignacion
               int cont2=0;
               fs.getline(palabra,80,'\n');
