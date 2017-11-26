@@ -22,17 +22,8 @@ int numero_estadios;
 
 //dinamico
 
-typedef struct{
-  string nombre;
-  string estadio;
-  punto puntos;
-}equipo;
-
-equipo* equipos=NULL;
-
 double** distancias=NULL;//distancia entre estadios
 
-// Cuando se quitan estas variables, arroja error de segmento (core)
 string* nombre=NULL;//nombre del equipo
 string* estadio=NULL;//nombre del estadio
 punto* puntos=NULL;// longitud y latitud del estadio
@@ -58,13 +49,13 @@ double distancia_long_lat(float lat1, float long1, float lat2, float long2)//los
 	return radio_tierra*acos(((sin(lat1))*(sin(lat2)))+(((cos(lat1))*(cos(lat2))*(cos(long2 - long1)))));
 }
 
-void llena_matriz_dis(equipo e[])
+void llena_matriz_dis()
 {
   for(int i=0; i<numero_estadios; i++)
   {
     for(int j=0; j<numero_estadios; j++)
     {
-      distancias[i][j] = distancia_long_lat(e[i].puntos.latitud, e[i].puntos.longitud, e[j].puntos.latitud, e[j].puntos.longitud);
+      distancias[i][j] = distancia_long_lat(puntos[i].latitud, puntos[i].longitud, puntos[j].latitud, puntos[j].longitud);
     }
   }
 }
@@ -82,13 +73,11 @@ int leer_equipo(cadena archivo){
             while(!fs.eof())
           {
               // Asignacion de memoria a
-              equipos = (equipo*)realloc(equipos,sizeof(equipo)*(cont+1));
-              // Cuando se quitan estas variables, arroja error de segmento (core)
               nombre = (string*)realloc(nombre,sizeof(string)*(cont+1));//asignacion de memoria al nombre (vector de largo posiciones
               estadio = (string*)realloc(estadio,sizeof(string)*(cont+1));
               puntos = (punto*)realloc(puntos,sizeof(punto)*(cont+1));
-              //
               // Fin asignacion
+
               int cont2=0;
               fs.getline(palabra,80,'\n');
               //cout<<"Dato sin separar: "<<string<<endl;
@@ -97,22 +86,22 @@ int leer_equipo(cadena archivo){
                    {
                     if (cont2==0){
                     //COLUMNA 1 - NOMBRE EQUIPO
-                    equipos[cont].nombre = ptr;
+                    nombre[cont] = ptr;
 
                       }
                     if (cont2==1){
                     //COLUMNA 2 - NOMBRE ESTADIO
-                    equipos[cont].estadio = ptr;
+                    estadio[cont] = ptr;
 
                      }
                     if (cont2==2){
                     //COLUMNA 3 -  COORDENADA X
-                    equipos[cont].puntos.latitud = atof(ptr);
+                    puntos[cont].latitud = atof(ptr);
 
                      }
                      if (cont2==3){
                     //COLUMNA 4 - COORDENADA Y
-                    equipos[cont].puntos.longitud = atof(ptr);
+                    puntos[cont].longitud = atof(ptr);
 
                      }
                     //cout <<"Dato separado:"<< ptr << endl;
@@ -126,8 +115,8 @@ int leer_equipo(cadena archivo){
  }
 }
 
-void mostrarEquipo(equipo e){
-  cout<<e.nombre<<";"<<e.estadio<<";"<<e.puntos.latitud<<";"<<e.puntos.longitud<<endl;
+void mostrarEquipo(int i){
+  cout<<nombre[i]<<";"<<estadio[i]<<";"<<puntos[i].latitud<<";"<<puntos[i].longitud<<endl;
 }
 
 int main(int argc, char *argv[])
@@ -142,12 +131,17 @@ int main(int argc, char *argv[])
     distancias[i]=new double[numero_estadios];
   }
   // Fin Asignacion
-  //Muestra la lista de los equipos almacenados
-  for(int i=0; i<numero_estadios; i++) mostrarEquipo(equipos[i]);
-  //Calcula y guarda las distancias en la matriz de distancia
-  llena_matriz_dis(equipos);
 
-  cout<<"La distancia entre: "<<equipos[0].nombre<<" y "<<equipos[1].nombre<<" es: "<<distancias[0][1]<<" KM"<<endl;
+  //Muestra la lista de los equipos almacenados
+  for(int i=0; i<numero_estadios; i++) 
+  {
+    mostrarEquipo(i);
+  }
+
+  //Calcula y guarda las distancias en la matriz de distancia
+  llena_matriz_dis();
+
+  cout<<"La distancia entre: "<<estadio[0]<<" y "<<estadio[1]<<" es: "<<distancias[0][1]<<" KM"<<endl;
 	return 0;
 
 }
