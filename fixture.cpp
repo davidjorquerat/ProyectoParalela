@@ -42,17 +42,23 @@ string nombre[16];//nombre del equipo
 string estadio[16];//nombre del estadio
 punto puntos[16];// longitud y latitud del estadio
 
+double en_radianes(double dato)
+{
+  float const pi = 3.14159265359;
+  return dato = dato*(pi/180);
+}
+
 
 double distancia_long_lat(float lat1, float long1, float lat2, float long2)//los calculos son en km
 {
   float radio_tierra = 6378.7;
-  float const pi = 3.14159265359;
+  
 
   //conversion a radianes
-  lat1 = lat1*(pi/180);
-  lat2 = lat2*(pi/180);
-  long1 = long1*(pi/180);
-  long2 = long2*(pi/180);
+  lat1 = en_radianes(lat1);
+  lat2 = en_radianes(lat2);
+  long1 = en_radianes(long1);
+  long2 = en_radianes(long2);
 
   return radio_tierra*acos(((sin(lat1))*(sin(lat2)))+(((cos(lat1))*(cos(lat2))*(cos(long2 - long1)))));
 }
