@@ -1,8 +1,9 @@
 #include <iostream>
-#include <stdlib.h>
-#include <math.h>
+#include <cstdlib>
+#include <cmath>
 #include <fstream>
 #include <cstring>
+#include <vector>
 //#include <mpi.h>
 
 using namespace std;
@@ -17,8 +18,15 @@ typedef struct
   float longitud;
 }punto;
 
+typedef struct{
+  string nombre;
+  string estadio;
+  punto coordenada;
+}equipo;
+
 int numero_estadios;
 
+vector<equipo> equipos;
 
 //dinamico
 
@@ -55,7 +63,7 @@ void llena_matriz_dis()
   {
     for(int j=0; j<numero_estadios-1; j++)
     {
-      distancias[i][j] = distancia_long_lat(puntos[i].latitud, puntos[i].longitud, puntos[j].latitud, puntos[j].longitud);
+      distancias[i][j] = distancia_long_lat(equipos[i].coordenada.latitud, equipos[i].coordenada.longitud, equipos[j].coordenada.latitud, equipos[j].coordenada.longitud);
     }
   }
 }
@@ -72,51 +80,50 @@ int leer_equipo(cadena archivo){
 
             while(!fs.eof())
           {
-              
 
               int cont2=0;
               fs.getline(palabra,80,'\n');
+              equipo aux;
               //cout<<"Dato sin separar: "<<palabra<<endl;
               ptr = strtok(palabra,";");
               while(ptr != NULL)
                    {
                     if (cont2==0){
                     //COLUMNA 1 - NOMBRE EQUIPO
-                    nombre[cont] = ptr;
+                    aux.nombre = ptr;
                     //cout <<"Dato separado:"<< ptr << endl;
 
                       }
                     if (cont2==1){
                     //COLUMNA 2 - NOMBRE ESTADIO
-                    estadio[cont] = ptr;
+                    aux.estadio = ptr;
                     //cout <<"Dato separado:"<< ptr << endl;
 
                      }
                     if (cont2==2){
                     //COLUMNA 3 -  COORDENADA X
-                    puntos[cont].latitud = atof(ptr);
+                    aux.coordenada.latitud = atof(ptr);
                     //cout <<"Dato separado:"<< ptr << endl;
 
                      }
                      if (cont2==3){
                     //COLUMNA 4 - COORDENADA Y
-                    puntos[cont].longitud = atof(ptr);
+                    aux.coordenada.longitud = atof(ptr);
                     //cout <<"Dato separado:"<< ptr << endl;
-
-                     }
-
+                    equipos.insert(equipos.begin()+cont,aux);
+                    }
                     ptr = strtok(NULL, ";");
                     cont2++;
                    }
-                   
+
                    cont++;
             }
             return cont;
  }
 }
 
-void mostrarEquipo(int i){
-  cout<<nombre[i]<<";"<<estadio[i]<<";"<<puntos[i].latitud<<";"<<puntos[i].longitud<<endl;
+void mostrarEquipo(equipo e){
+  cout<<e.nombre<<";"<<e.estadio<<";"<<e.coordenada.latitud<<";"<<e.coordenada.longitud<<endl;
 }
 
 int main(int argc, char *argv[])
@@ -129,9 +136,9 @@ int main(int argc, char *argv[])
 
 
   //Muestra la lista de los equipos almacenados
-  for(int i=0; i<numero_estadios; i++) 
+  for(int i=0; i<numero_estadios; i++)
   {
-    mostrarEquipo(i);
+    mostrarEquipo(equipos[i]);
   }
 
 
@@ -140,10 +147,10 @@ int main(int argc, char *argv[])
   //Calcula y guarda las distancias en la matriz de distancia
   llena_matriz_dis();
 
-  cout<<"La distancia entre: "<<estadio[0]<<" y "<<estadio[1]<<" es: "<<distancias[0][1]<<" KM"<<endl;
-  cout<<"La distancia entre: "<<estadio[10]<<" y "<<estadio[5]<<" es: "<<distancias[10][5]<<" KM"<<endl;
-  cout<<"La distancia entre: "<<estadio[14]<<" y "<<estadio[2]<<" es: "<<distancias[14][2]<<" KM"<<endl;
-  cout<<"La distancia entre: "<<estadio[7]<<" y "<<estadio[11]<<" es: "<<distancias[7][11]<<" KM"<<endl;
+  cout<<"La distancia entre "<<equipos[0].nombre<<" y "<<equipos[1].nombre<<" es: "<<distancias[0][1]<<" KM"<<endl;
+  cout<<"La distancia entre "<<equipos[10].nombre<<" y "<<equipos[5].nombre<<" es: "<<distancias[10][5]<<" KM"<<endl;
+  cout<<"La distancia entre "<<equipos[14].nombre<<" y "<<equipos[2].nombre<<" es: "<<distancias[14][2]<<" KM"<<endl;
+  cout<<"La distancia entre "<<equipos[7].nombre<<" y "<<equipos[11].nombre<<" es: "<<distancias[7][11]<<" KM"<<endl;
   return 0;
 
 }
