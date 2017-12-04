@@ -52,7 +52,7 @@ double en_radianes(double dato)
 double distancia_long_lat(float lat1, float long1, float lat2, float long2)//los calculos son en km
 {
   float radio_tierra = 6378.7;
-  
+
 
   //conversion a radianes
   lat1 = en_radianes(lat1);
@@ -128,6 +128,10 @@ int leer_equipo(cadena archivo){
  }
 }
 
+void mostrarDistancia(int i, int j){
+  cout<<"La distancia entre "<<equipos[i].nombre<<" y "<<equipos[j].nombre<<" es: "<<distancias[i][j]<<endl;
+}
+
 void mostrarEquipo(equipo e){
   cout<<e.nombre<<";"<<e.estadio<<";"<<e.coordenada.latitud<<";"<<e.coordenada.longitud<<endl;
 }
@@ -153,10 +157,10 @@ int main(int argc, char *argv[])
   //Calcula y guarda las distancias en la matriz de distancia
   llena_matriz_dis();
 
-  cout<<"La distancia entre "<<equipos[0].nombre<<" y "<<equipos[1].nombre<<" es: "<<distancias[0][1]<<" KM"<<endl;
-  cout<<"La distancia entre "<<equipos[10].nombre<<" y "<<equipos[5].nombre<<" es: "<<distancias[10][5]<<" KM"<<endl;
-  cout<<"La distancia entre "<<equipos[14].nombre<<" y "<<equipos[2].nombre<<" es: "<<distancias[14][2]<<" KM"<<endl;
-  cout<<"La distancia entre "<<equipos[7].nombre<<" y "<<equipos[11].nombre<<" es: "<<distancias[7][11]<<" KM"<<endl;
+  mostrarDistancia(0,1);
+  mostrarDistancia(10,5);
+  mostrarDistancia(14,2);
+  mostrarDistancia(7,11);
   return 0;
 
 }
