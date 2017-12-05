@@ -3,6 +3,7 @@
 #include <cmath>
 #include <fstream>
 #include <cstring>
+#include <string>
 #include <vector>
 #include <xlsxwriter.h>
 //#include <mpi.h>
@@ -173,16 +174,18 @@ bool crearExcel(){
   lxw_format *format = workbook_add_format(workbook);
   format_set_bold(format);
   int cont=0;
-  for(int i=0;i<16;i++){
-    for(int j=i+1;j<16;j++){
+  for(int i=0; i<partidos.size(); i++)
+  {
       char cadena[30];
-      sprintf(cadena,"%s","Equipo 1");
-      worksheet_write_string(worksheet, cont, 0,cadena, NULL);
-      worksheet_write_string(worksheet, cont, 1,"Fecha", format);
-      sprintf(cadena,"%s","Equipo 2");
-      worksheet_write_string(worksheet, cont, 2,cadena, NULL);
+      sprintf(cadena,"%s",partidos[i].local);
+      worksheet_write_string(worksheet, cont, 0, cadena, NULL);
+
+      sprintf(cadena,"%d",partidos[i].fecha);
+      worksheet_write_string(worksheet, cont, 1, cadena, format);
+
+      sprintf(cadena,"%s",partidos[i].visita);
+      worksheet_write_string(worksheet, cont, 2, cadena, NULL);
       cont++;
-    }
   }
   cout<<"Excel creado."<<endl;
   return workbook_close(workbook);
@@ -207,6 +210,15 @@ int main(int argc, char *argv[])
   {
     mostrarEquipo(equipos[i]);
   }
+
+  //agrega partidos de prueba
+
+  for(int i=0;i<numero_estadios-1;i++)
+  {
+    agrega_partido(equipos[i].nombre, equipos[i+1].nombre, i);
+  }
+
+  cout<<partidos[0].local<<" juega con "<<partidos[0].visita<<" en la fecha "<<partidos[0].fecha<<endl;
 
   //Calcula y guarda las distancias en la matriz de distancia
   llena_matriz_dis();
