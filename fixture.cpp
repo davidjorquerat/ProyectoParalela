@@ -4,6 +4,7 @@
 #include <fstream>
 #include <cstring>
 #include <vector>
+#include <xlsxwriter.h>
 //#include <mpi.h>
 
 using namespace std;
@@ -117,12 +118,12 @@ int leer_equipo(cadena archivo){
                     aux.coordenada.longitud = atof(ptr);
                     //cout <<"Dato separado:"<< ptr << endl;
                     equipos.insert(equipos.begin()+cont,aux);
+                    cont++;
                     }
                     ptr = strtok(NULL, ";");
                     cont2++;
                    }
 
-                   cont++;
             }
             return cont;
  }
@@ -136,14 +137,33 @@ void mostrarEquipo(equipo e){
   cout<<e.nombre<<";"<<e.estadio<<";"<<e.coordenada.latitud<<";"<<e.coordenada.longitud<<endl;
 }
 
+bool crearExcel(){
+  cout<<"Creando excel de prueba"<<endl;
+  lxw_workbook  *workbook  = workbook_new("prueba.xlsx");
+  lxw_worksheet *worksheet = workbook_add_worksheet(workbook, NULL);
+  lxw_format *format = workbook_add_format(workbook);
+  format_set_bold(format);
+  int cont=0;
+  for(int i=0;i<16;i++){
+    for(int j=i+1;j<16;j++){
+      char cadena[30];
+      sprintf(cadena,"%s","Equipo 1");
+      worksheet_write_string(worksheet, cont, 0,cadena, NULL);
+      worksheet_write_string(worksheet, cont, 1,"Fecha", format);
+      sprintf(cadena,"%s","Equipo 2");
+      worksheet_write_string(worksheet, cont, 2,cadena, NULL);
+      cont++;
+    }
+  }
+  cout<<"Excel creado."<<endl;
+  return workbook_close(workbook);
+}
+
 int main(int argc, char *argv[])
 {
   numero_estadios = leer_equipo(argv[1]);
 
   cout<<"Lineas en el fichero: "<<numero_estadios<<endl;
-
-
-
 
   //Muestra la lista de los equipos almacenados
   for(int i=0; i<numero_estadios; i++)
@@ -151,16 +171,13 @@ int main(int argc, char *argv[])
     mostrarEquipo(equipos[i]);
   }
 
-
-
-
   //Calcula y guarda las distancias en la matriz de distancia
   llena_matriz_dis();
 
-  mostrarDistancia(0,1);
-  mostrarDistancia(10,5);
-  mostrarDistancia(14,2);
-  mostrarDistancia(7,11);
+  for(int i=0;i<16;i++)
+    mostrarDistancia(15,i);
+
+  crearExcel();
   return 0;
 
 }
