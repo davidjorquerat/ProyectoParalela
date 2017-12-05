@@ -14,25 +14,26 @@ char *ptr;
 
 //int largo = 60;
 
-typedef struct
+struct punto
 {
   float latitud;
   float longitud;
-}punto;
+};
 
-typedef struct{
+struct equipo
+{
   string nombre;
   string estadio;
   punto coordenada;
-}equipo;
+};
 
 //estructura que almacena los partidos que se mostraran en la planilla excel
-typedef struct
+struct partido
 {
   string local;
   string visita;
   int fecha;
-}partido;
+};
 
 int numero_estadios;
 
@@ -176,15 +177,14 @@ bool crearExcel(){
   int cont=0;
   for(int i=0; i<partidos.size(); i++)
   {
-      char cadena[30];
-      sprintf(cadena,"%s",partidos[i].local);
-      worksheet_write_string(worksheet, cont, 0, cadena, NULL);
+      char cadena[4];
 
-      sprintf(cadena,"%d",partidos[i].fecha);
+      worksheet_write_string(worksheet, cont, 0, partidos[i].local.c_str(), NULL);
+
+      sprintf(cadena,"%d",partidos[i].fecha);//entero a string
       worksheet_write_string(worksheet, cont, 1, cadena, format);
 
-      sprintf(cadena,"%s",partidos[i].visita);
-      worksheet_write_string(worksheet, cont, 2, cadena, NULL);
+      worksheet_write_string(worksheet, cont, 2, partidos[i].visita.c_str(), NULL);
       cont++;
   }
   cout<<"Excel creado."<<endl;
