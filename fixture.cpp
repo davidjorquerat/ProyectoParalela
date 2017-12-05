@@ -25,9 +25,21 @@ typedef struct{
   punto coordenada;
 }equipo;
 
+//estructura que almacena los partidos que se mostraran en la planilla excel
+typedef struct
+{
+  string local;
+  string visita;
+  int fecha;
+}partido;
+
 int numero_estadios;
 
+//vector de estructura de equipos
 vector<equipo> equipos;
+
+//vector de estructura de partidos
+vector<partido> partidos;
 
 //distancia dinamica
 
@@ -47,6 +59,18 @@ string nombre[16];//nombre del equipo
 string estadio[16];//nombre del estadio
 punto puntos[16];// longitud y latitud del estadio
 */
+
+//funcion para agregar partidos que se mostraran en la planilla excel
+void agrega_partido(string eq_local, string eq_visita, int fecha_partido)
+{
+  partido p;
+
+  p.local = eq_local;
+  p.visita = eq_visita;
+  p.fecha = fecha_partido;
+
+  partidos.push_back(p);
+}
 
 double en_radianes(double dato)
 {
