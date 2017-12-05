@@ -29,9 +29,12 @@ int numero_estadios;
 
 vector<equipo> equipos;
 
-//dinamico
+//distancia dinamica
 
-double distancias[16][16];//distancia entre estadios
+double **distancias;
+
+//distancia estatica
+//double distancias[16][16];//distancia entre estadios
 
 //string* nombre=NULL;//nombre del equipo
 //string* estadio=NULL;//nombre del estadio
@@ -39,9 +42,11 @@ double distancias[16][16];//distancia entre estadios
 
 
 //estatico
+/*
 string nombre[16];//nombre del equipo
 string estadio[16];//nombre del estadio
 punto puntos[16];// longitud y latitud del estadio
+*/
 
 double en_radianes(double dato)
 {
@@ -66,9 +71,9 @@ double distancia_long_lat(float lat1, float long1, float lat2, float long2)//los
 
 void llena_matriz_dis()
 {
-  for(int i=0; i<numero_estadios-1; i++)
+  for(int i=0; i<numero_estadios; i++)
   {
-    for(int j=0; j<numero_estadios-1; j++)
+    for(int j=0; j<numero_estadios; j++)
     {
       distancias[i][j] = distancia_long_lat(equipos[i].coordenada.latitud, equipos[i].coordenada.longitud, equipos[j].coordenada.latitud, equipos[j].coordenada.longitud);
     }
@@ -163,6 +168,14 @@ int main(int argc, char *argv[])
 {
   numero_estadios = leer_equipo(argv[1]);
 
+  //asignacion de memoria a la matriz dinamica distancias
+  distancias = new double*[numero_estadios];
+  for(int i=0; i<numero_estadios; i++)
+  {
+    distancias[i] = new double[numero_estadios];
+  }
+  //fin de asignacion de memoria
+
   cout<<"Lineas en el fichero: "<<numero_estadios<<endl;
 
   //Muestra la lista de los equipos almacenados
@@ -178,6 +191,14 @@ int main(int argc, char *argv[])
     mostrarDistancia(15,i);
 
   crearExcel();
+
+  //se libera la memoria usada por la matriz dinamica
+  for(int i = 0; i < numero_estadios; i++) 
+  {
+    delete[] distancias[i];
+  }
+  delete[] distancias;
+
   return 0;
 
 }
