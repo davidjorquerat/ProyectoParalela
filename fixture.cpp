@@ -168,9 +168,13 @@ void mostrarEquipo(equipo e){
   cout<<e.nombre<<";"<<e.estadio<<";"<<e.coordenada.latitud<<";"<<e.coordenada.longitud<<endl;
 }
 
-bool crearExcel(){
+bool crearExcel(cadena argumento){
   cout<<"Creando excel de prueba"<<endl;
-  lxw_workbook  *workbook  = workbook_new("prueba.xlsx");
+  
+  //crea ruta para guardar el archivo
+  string ruta = strcat(argumento,"/prueba.xlsx");
+
+  lxw_workbook  *workbook  = workbook_new(ruta.c_str());
   lxw_worksheet *worksheet = workbook_add_worksheet(workbook, NULL);
   lxw_format *format = workbook_add_format(workbook);
   format_set_bold(format);
@@ -226,7 +230,7 @@ int main(int argc, char *argv[])
   for(int i=0;i<16;i++)
     mostrarDistancia(15,i);
 
-  crearExcel();
+  crearExcel(argv[2]);
 
   //se libera la memoria usada por la matriz dinamica
   for(int i = 0; i < numero_estadios; i++) 
