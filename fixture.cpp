@@ -170,9 +170,12 @@ void mostrarEquipo(equipo e){
 
 bool crearExcel(cadena argumento){
   cout<<"Creando excel de prueba"<<endl;
-  
+  string ruta;
   //crea ruta para guardar el archivo
-  string ruta = strcat(argumento,"/prueba.xlsx");
+  if (argumento!=NULL)
+    ruta = strcat(argumento,"/prueba.xlsx");
+  else
+    ruta = "prueba.xlsx";
 
   lxw_workbook  *workbook  = workbook_new(ruta.c_str());
   lxw_worksheet *worksheet = workbook_add_worksheet(workbook, NULL);
@@ -183,7 +186,7 @@ bool crearExcel(cadena argumento){
   worksheet_write_string(worksheet, 0, 0, "LOCAL", format);
   worksheet_write_string(worksheet, 0, 1, "FECHA", format);
   worksheet_write_string(worksheet, 0, 2, "VISITA", format);
-  
+
   for(int i=0; i<partidos.size(); i++)
   {
       char cadena[4];
@@ -202,48 +205,62 @@ bool crearExcel(cadena argumento){
 
 int main(int argc, char *argv[])
 {
-  numero_estadios = leer_equipo(argv[1]);
+  switch(argc){
+    case 1:
+      cout<<"No se ha indicado fichero de equipos."<<endl;
+      break;
+    case 2:
+      cout<<"No se ha indicado ruta de salida para el fichero Excel."<<endl;
+      cout<<"Se utilizara la misma ruta del programa."<<endl;
+    case 3:
+      {
+        numero_estadios = leer_equipo(argv[1]);
 
-  //asignacion de memoria a la matriz dinamica distancias
-  distancias = new double*[numero_estadios];
-  for(int i=0; i<numero_estadios; i++)
-  {
-    distancias[i] = new double[numero_estadios];
+        //asignacion de memoria a la matriz dinamica distancias
+        distancias = new double*[numero_estadios];
+        for(int i=0; i<numero_estadios; i++)
+        {
+          distancias[i] = new double[numero_estadios];
+        }
+        //fin de asignacion de memoria
+
+        cout<<"Cantidad de equipos: "<<numero_estadios<<endl;
+
+        //Muestra la lista de los equipos almacenados
+        for(int i=0; i<numero_estadios; i++)
+        {
+          mostrarEquipo(equipos[i]);
+        }
+
+        //agrega partidos de prueba
+
+        for(int i=0;i<numero_estadios-1;i++)
+        {
+          agrega_partido(equipos[i].nombre, equipos[i+1].nombre, i);
+        }
+
+        cout<<partidos[0].local<<" juega con "<<partidos[0].visita<<" en la fecha "<<partidos[0].fecha<<endl;
+
+        //Calcula y guarda las distancias en la matriz de distancia
+        llena_matriz_dis();
+
+        for(int i=0;i<16;i++)
+          mostrarDistancia(15,i);
+
+        crearExcel(argv[2]);
+
+        //se libera la memoria usada por la matriz dinamica
+        for(int i = 0; i < numero_estadios; i++)
+        {
+          delete[] distancias[i];
+        }
+        delete[] distancias;
+      }
+      break;
+    default:
+      cout<<"Demasiados argumentos."<<endl;
+      break;
   }
-  //fin de asignacion de memoria
-
-  cout<<"Lineas en el fichero: "<<numero_estadios<<endl;
-
-  //Muestra la lista de los equipos almacenados
-  for(int i=0; i<numero_estadios; i++)
-  {
-    mostrarEquipo(equipos[i]);
-  }
-
-  //agrega partidos de prueba
-
-  for(int i=0;i<numero_estadios-1;i++)
-  {
-    agrega_partido(equipos[i].nombre, equipos[i+1].nombre, i);
-  }
-
-  cout<<partidos[0].local<<" juega con "<<partidos[0].visita<<" en la fecha "<<partidos[0].fecha<<endl;
-
-  //Calcula y guarda las distancias en la matriz de distancia
-  llena_matriz_dis();
-
-  for(int i=0;i<16;i++)
-    mostrarDistancia(15,i);
-
-  crearExcel(argv[2]);
-
-  //se libera la memoria usada por la matriz dinamica
-  for(int i = 0; i < numero_estadios; i++) 
-  {
-    delete[] distancias[i];
-  }
-  delete[] distancias;
-
   return 0;
 
 }
