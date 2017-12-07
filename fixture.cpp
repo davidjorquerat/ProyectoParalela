@@ -178,7 +178,12 @@ bool crearExcel(cadena argumento){
   lxw_worksheet *worksheet = workbook_add_worksheet(workbook, NULL);
   lxw_format *format = workbook_add_format(workbook);
   format_set_bold(format);
-  int cont=0;
+  int cont=1;
+  //nombres de columnas
+  worksheet_write_string(worksheet, 0, 0, "LOCAL", format);
+  worksheet_write_string(worksheet, 0, 1, "FECHA", format);
+  worksheet_write_string(worksheet, 0, 2, "VISITA", format);
+  
   for(int i=0; i<partidos.size(); i++)
   {
       char cadena[4];
