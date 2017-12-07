@@ -177,15 +177,30 @@ bool crearExcel(cadena argumento){
   else
     ruta = "prueba.xlsx";
 
-  lxw_workbook  *workbook  = workbook_new(ruta.c_str());
-  lxw_worksheet *worksheet = workbook_add_worksheet(workbook, NULL);
-  lxw_format *format = workbook_add_format(workbook);
-  format_set_bold(format);
+  lxw_workbook  *workbook  = workbook_new(ruta.c_str()); //Se crea el fichero excel
+  lxw_worksheet *worksheet = workbook_add_worksheet(workbook, NULL); //Se agrega una hoja al fichero
+  //formatos que se aplicaran en la hoja
+  lxw_format *bold = workbook_add_format(workbook);
+  lxw_format *bold_local = workbook_add_format(workbook);
+  lxw_format *bold_fecha = workbook_add_format(workbook);
+  lxw_format *local = workbook_add_format(workbook);
+  lxw_format *fecha = workbook_add_format(workbook);
+  format_set_bold(bold);
+  format_set_bold(bold_local);
+  format_set_bold(bold_fecha);
+  format_set_align(local,LXW_ALIGN_RIGHT);
+  format_set_align(fecha,LXW_ALIGN_CENTER);
+  format_set_align(bold_local,LXW_ALIGN_RIGHT);
+  format_set_align(bold_fecha,LXW_ALIGN_CENTER);
   int cont=1;
+  //formato de columnas
+  worksheet_set_column(worksheet, 0, 0, 30, local);
+  worksheet_set_column(worksheet, 1, 1, 20, fecha);
+  worksheet_set_column(worksheet, 2, 2, 30, NULL);
   //nombres de columnas
-  worksheet_write_string(worksheet, 0, 0, "LOCAL", format);
-  worksheet_write_string(worksheet, 0, 1, "FECHA", format);
-  worksheet_write_string(worksheet, 0, 2, "VISITA", format);
+  worksheet_write_string(worksheet, 0, 0, "LOCAL", bold_local);
+  worksheet_write_string(worksheet, 0, 1, "FECHA", bold_fecha);
+  worksheet_write_string(worksheet, 0, 2, "VISITA", bold);
 
   for(int i=0; i<partidos.size(); i++)
   {
@@ -194,7 +209,7 @@ bool crearExcel(cadena argumento){
       worksheet_write_string(worksheet, cont, 0, partidos[i].local.c_str(), NULL);
 
       sprintf(cadena,"%d",partidos[i].fecha);//entero a string
-      worksheet_write_string(worksheet, cont, 1, cadena, format);
+      worksheet_write_string(worksheet, cont, 1, cadena, NULL);
 
       worksheet_write_string(worksheet, cont, 2, partidos[i].visita.c_str(), NULL);
       cont++;
@@ -205,7 +220,7 @@ bool crearExcel(cadena argumento){
 
 int main(int argc, char *argv[])
 {
-  switch(argc){
+  switch(argc){ //Revisa la cantidad de argumentos ingresados al ejecutar el programa
     case 1:
       cout<<"No se ha indicado fichero de equipos."<<endl;
       break;
