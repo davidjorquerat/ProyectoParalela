@@ -13,17 +13,13 @@ using namespace std;
 typedef char cadena[80];
 char *ptr;
 
-//int largo = 60;
 
 int hi;
 int jota;
 
 double distancias_copia[16][16];
 double distancias_bloqueo[16][16];
-//vector<int> ubicacion;
 int ubicacion[16];
-//vector<int> ubicacion2;
-//int local[16][16];
 
 
 struct punto
@@ -115,48 +111,7 @@ void llena_matriz_dis() //FUNCION QUE LLENA 2 MATRICES IGUALES CON LAS DISTANCIA
 }
 
 
-
-int find(vector<int> vec, int t) //FUNCION QUE BUSCA DENTRO DE UN VECTOR UN NUMERO, SI ESTA RETORNA LA POSICION, SI NO ESTA RETORNA -1
-{
-  int i = 0;
-  while (i < vec.size())
-  {
-    if (vec[i] == t)
-      return i;
-      else
-        i++;
-
-  }
-  return -1;
-}
-
-/*
-void llena_matriz_dis2(vector<int> vec) // FUNCION QUE COPIA FILAS DESDE MATRIZ ORGINAL SIN CAMBIAR LA DIAGONAL NI LOS -1
-{
-  int i=0;
-  for(int j=0; j<numero_estadios; j++)
-  {
-    for(int i=0; i<numero_estadios; i++)
-    {
-      if(find(ubicacion,j)%2!=0)// SI la POSICION EL NUMERO(J) CONTENIDO EN EL VECTOR ES IMPAR(VISITA) ENTRA
-      {
-    	  if(i==j){
-      		distancias_copia[i][j] = INFINITO;
-        }
-  	    if(distancias_copia[i][j]!=INFINITO)
-        {
-          distancias_copia[i][j] = distancias[i][ubicacion[find(ubicacion,j)-1]];
-        }
-      }
-      else if(distancias_copia[i][j]!=INFINITO) //SI ES PAR ENTRA
-      {
-        distancias_copia[i][j] = distancias[i][ubicacion[find(ubicacion,j)]];
-      }
-	   }
-   }
-}*/
-
-void llena_matriz_dis2() // FUNCION QUE COPIA FILAS DESDE MATRIZ ORGINAL SIN CAMBIAR LA DIAGONAL NI LOS -1
+void cambia_filas() // FUNCION QUE COPIA FILAS DESDE MATRIZ ORGINAL SIN CAMBIAR LA DIAGONAL NI LOS -1
 {
   int i=0;
   for(int i=0; i<numero_estadios; i++)
@@ -226,15 +181,6 @@ void llena_matriz_dis2() // FUNCION QUE COPIA FILAS DESDE MATRIZ ORGINAL SIN CAM
   }
 }
 
-
-void mostrarDistancia(int i, int j){
-  cout<<"La distancia entre "<<equipos[i].nombre<<" y "<<equipos[j].nombre<<" es: "<<distancias[i][j]<<endl;
-}
-
-void mostrarEquipo(equipo e){
-  cout<<e.nombre<<";"<<e.estadio<<";"<<e.coordenada.latitud<<";"<<e.coordenada.longitud<<endl;
-}
-
 bool crearExcel(cadena argumento){
   cout<<"Creando excel de prueba"<<endl;
   string ruta;
@@ -284,60 +230,6 @@ bool crearExcel(cadena argumento){
   cout<<"Excel creado."<<endl;
   return workbook_close(workbook);
 }
-void mostrarFecha(int i,int j){
-  cout<<equipos[i].nombre<<" V/S "<<equipos[j].nombre<<endl;
-}
-
-/*
-indices minimoPorFila(){
-  int menor=INFINITO,cont=0,menor_cont=INFINITO,indice_menor,menores[16];
-  indices indice;
-  indice.i=-1;
-  indice.j=-1;
-  for(int i=0;i<numero_estadios;i++) menores[i]=0;
-  for(int i=0;i<numero_estadios;i++){
-    for(int j=0;j<numero_estadios;j++){
-      if(distancias_copia[i][j]<=menor) menores[i]++;
-    }
-  }
-  for(int i=0;i<numero_estadios;i++){
-    for(int j=0;j<numero_estadios;j++){
-      if(habilitado[i] && habilitado[j] && menores[i]<=menor_cont){
-        menor_cont=menores[i];
-        indice_menor=i;
-      }
-    }
-  }
-  for(int i=0;i<numero_estadios;i++){
-    if(distancias_copia[indice_menor][i]<=menor){
-      menor=distancias_copia[indice_menor][i];
-      indice.i=indice_menor;
-      indice.j=i;
-    }
-  }
-  distancias_copia[indice.i][indice.j]=INFINITO;
-  habilitado[indice.i]=false;
-  habilitado[indice.j]=false;
-  // for(int i=0;i<numero_estadios-1;i++){
-  //   for(int j=1;j<numero_estadios;j++){
-  //     if(habilitado[i] && habilitado[j]){
-  //       if(distancias_copia[i][j]<menor){
-  //         cont++;
-  //         menor=distancias_copia[i][j];
-  //         indice.i=i;
-  //         indice.j=j;
-  //       }
-  //     }
-  //   }
-  //   if(menor<INFINITO){
-  //     habilitado[indice.i]=false;
-  //     habilitado[indice.j]=false;
-  //     distancias_copia[indice.i][indice.j]=INFINITO;
-  //     break;
-  //   }
-  // }
-  return indice;
-}*/
 
 indices minimoPorFila(){
 
@@ -352,11 +244,9 @@ indices minimoPorFila(){
       {
         if(distancias_copia[i][j]!=INFINITO)
         {
-          //cout<<endl<<endl<<endl<<"***************************  ENTRE   ***************************"<<endl<<endl<<endl;
           indice.i = i;
           indice.j = j;
-          //cout<<endl<<endl<<"***********   i: "<<indice.i<<"   *************"<<endl;
-          //cout<<endl<<endl<<"***********   j: "<<indice.j<<"   *************"<<endl;
+
           distancias_copia[indice.i][indice.j]=INFINITO;
           habilitado[indice.i]=false;
           habilitado[indice.j]=false;
@@ -386,7 +276,6 @@ indices minimoPorMatriz(){
   for(int i=0;i<numero_estadios;i++){
     for(int j=0;j<numero_estadios;j++){
       if(habilitado[i] && habilitado[j]){
-        //cout<<"Distancia reccorida: "<<distancias_copia[i][j]<<endl<<endl;
         if(distancias_copia[i][j]<=menor){
           menor=distancias_copia[i][j];
           indice.i=i;
@@ -401,9 +290,6 @@ indices minimoPorMatriz(){
     habilitado[indice.j]=false;
     distancias_copia[indice.i][indice.j]=INFINITO;
   }
-  cout<<endl<<"Distancia entre equipos: "<<distancias_copia[indice.i][indice.j]<<endl;
-  
-  cout<<endl<<"Partido seleccionado: "<<equipos[indice.i].nombre<<"("<<indice.i+1<<") - "<<equipos[indice.j].nombre<<"("<<indice.j+1<<")"<<endl<<endl;
   return indice;
 }
 
@@ -432,26 +318,13 @@ void kernel()
 {
   indices indice;
   for(int k=0;k<(2*(numero_estadios-1));k++){ // RECORRIDO DE CADA FECHA
-    //bool bloqueado=false;
     int bloqueado = 0, deshabilita = 0;
-     habilitarEquipos();
-    //std::vector<int>().swap(ubicacion);
+    habilitarEquipos();
     for(int i=0; i<numero_estadios;i++)
     {
       ubicacion[i]=i;
     }
-    cout<<"FECHA "<<k+1<<endl;
     copiarMatriz(distancias_copia,distancias_bloqueo);
-    cout<<"MATRIZ QUE SE ANALIZA"<<endl;
-
-    for (int j=0;j<numero_estadios;j++)
-    {
-      for (int i=0;i<numero_estadios;i++)
-      {
-        printf("| %f |",distancias_copia[j][i]);
-      }
-    printf("\n");
-    }
     
     INICIO:
     for(int y=0;y<(numero_estadios/2);y++) // PARTIDOS POR FECHA
@@ -461,20 +334,6 @@ void kernel()
       {
         habilitarEquipos();
       }
-      // for(int j=0; j<numero_estadios; j++)
-      // {
-      //   if(find(ubicacion,j)==-1)
-      //   {
-      //     for(int i=0; i<numero_estadios; i++){
-      //       if(i!=j && distancias_copia[i][j]<=menor && find(ubicacion,i)==-1 && distancias_copia[i][j]!=INFINITO){
-      //       //cout<<"entro con i y j :"<<i<<" - "<<j<<endl;
-      //       menor=distancias_copia[i][j];
-      //       hi = i;
-      //       jota = j;
-      //       }
-      //     }
-      //   }
-      // }
         if(bloqueado == 0)
         { 
           indice=minimoPorMatriz();
@@ -487,51 +346,28 @@ void kernel()
 
       if(distancias[indice.i][indice.j]==INFINITO)
       {
-        cout<<endl<<endl<<endl<<"FALLA BLOQUEO"<<endl<<"*********************************************************************************************"<<endl<<endl<<endl;
+        
         copiarMatriz(distancias_bloqueo,distancias_copia);
 
         //indice=minimoPorFila();
         bloqueado++;
-        cout<<endl<<endl<<"************************ bloqueado = "<<bloqueado<<" ****************"<<endl<<endl;
+        
         if(deshabilita == 1)
         {
           goto INICIO;
         }
       }
-      //ubicacion.push_back(indice.i);
-      //ubicacion.push_back(indice.j);
+
       ubicacion[indice.i]=indice.j;
       distancias_copia[indice.i][indice.j]=INFINITO;
-      cout<<equipos[indice.i].nombre<<" V/S "<<equipos[indice.j].nombre<<endl;
+      
       agrega_partido(equipos[indice.i].nombre, equipos[indice.j].nombre, k+1);
     }
-    cout<<"MATRIZ SIN COPIAR"<<endl;
-    for (int j=0;j<numero_estadios;j++)
-    {
-      for (int i=0;i<numero_estadios;i++)
-      {
-        printf("| %f |",distancias_copia[j][i]);
-      }
-    printf("\n");
-    }
-    llena_matriz_dis2();
-    cout<<"MATRIZ CON FILAS COPIADAS "<<endl;
-    for (int j=0;j<numero_estadios;j++)
-    {
-      for (int i=0;i<numero_estadios;i++)
-      {
-        printf("| %f |",distancias_copia[j][i]);
-      }
-    printf("\n");
-    }
+    
+    cambia_filas();
+    
   }
 }
-
-
-
-
-
-
 
 int main(int argc, char *argv[])
 {
@@ -555,24 +391,16 @@ int main(int argc, char *argv[])
           distancias[i] = new double[numero_estadios];
         }
             //fin de asignacion de memoria
-      
-        cout<<"Lineas en el fichero: "<<numero_estadios<<endl;
 
-        //Muestra la lista de los equipos almacenados
-        for(int i=0; i<numero_estadios; i++)
-        {
-          mostrarEquipo(equipos[i]);
-        }
-       
+               
         //Calcula y guarda las distancias en la matriz de distancia
         llena_matriz_dis();
 
-
-
+        //crea el fixture
         kernel();
 
-
-        randomIndices();
+        //por si algun dia se implementa
+        //randomIndices();
 
         crearExcel(argv[2]);
 
