@@ -13,10 +13,6 @@ using namespace std;
 typedef char cadena[80];
 char *ptr;
 
-
-int hi;
-int jota;
-
 double distancias_copia[16][16];
 double distancias_bloqueo[16][16];
 int ubicacion[16];
@@ -231,7 +227,7 @@ bool crearExcel(cadena argumento){
   return workbook_close(workbook);
 }
 
-indices minimoPorFila(){
+indices partidoDisponible(){
 
 
   indices indice;
@@ -341,7 +337,7 @@ void kernel()
 
         else 
         {
-          indice=minimoPorFila();
+          indice=partidoDisponible();
         }
 
       if(distancias[indice.i][indice.j]==INFINITO)
@@ -349,7 +345,7 @@ void kernel()
         
         copiarMatriz(distancias_bloqueo,distancias_copia);
 
-        //indice=minimoPorFila();
+        //indice=partidoDisponible();
         bloqueado++;
         
         if(deshabilita == 1)
