@@ -1,39 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>fixture</class>
- <widget class="QMainWindow" name="fixture">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>266</width>
-    <height>375</height>
+    <width>335</width>
+    <height>465</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>fixture</string>
+   <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <widget class="QPushButton" name="Cargar">
+   <widget class="QPushButton" name="pushButton">
     <property name="geometry">
      <rect>
       <x>60</x>
-      <y>20</y>
-      <width>131</width>
-      <height>51</height>
+      <y>230</y>
+      <width>191</width>
+      <height>61</height>
      </rect>
     </property>
     <property name="text">
-     <string>Cargar</string>
+     <string>Creditos</string>
     </property>
    </widget>
    <widget class="QPushButton" name="pushButton_2">
     <property name="geometry">
      <rect>
       <x>60</x>
-      <y>90</y>
-      <width>131</width>
-      <height>51</height>
+      <y>130</y>
+      <width>191</width>
+      <height>61</height>
      </rect>
     </property>
     <property name="text">
@@ -44,26 +44,13 @@
     <property name="geometry">
      <rect>
       <x>60</x>
-      <y>160</y>
-      <width>131</width>
-      <height>51</height>
+      <y>40</y>
+      <width>191</width>
+      <height>61</height>
      </rect>
     </property>
     <property name="text">
-     <string>Creditos</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="lineas">
-    <property name="geometry">
-     <rect>
-      <x>90</x>
-      <y>270</y>
-      <width>60</width>
-      <height>16</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string/>
+     <string>Cargar</string>
     </property>
    </widget>
   </widget>
@@ -72,10 +59,16 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>266</width>
+     <width>335</width>
      <height>22</height>
     </rect>
    </property>
+   <widget class="QMenu" name="menuFixture">
+    <property name="title">
+     <string>Fixture</string>
+    </property>
+   </widget>
+   <addaction name="menuFixture"/>
   </widget>
   <widget class="QToolBar" name="mainToolBar">
    <attribute name="toolBarArea">
@@ -89,5 +82,25 @@
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>pushButton</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>abrirCargar()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>222</x>
+     <y>93</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>293</x>
+     <y>53</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>abrirCargar()</slot>
+ </slots>
 </ui>
